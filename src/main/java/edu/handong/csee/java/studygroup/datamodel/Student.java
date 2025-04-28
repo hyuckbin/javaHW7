@@ -10,12 +10,11 @@ public class Student {
     private int numOfReports;
     private int minutesForStudy;
 
-    // 기본 생성자
+
     public Student() {
         this.courseNames = new ArrayList<>();
     }
 
-    // 문자열 7개 받아서 초기화하는 생성자
     public Student(String groupNo, String memberID, String name, String course1, String course2, String numOfReports, String minutesForStudy) {
         this.groupNo = Integer.parseInt(groupNo);
         this.memberID = Integer.parseInt(memberID);
@@ -26,8 +25,7 @@ public class Student {
         this.numOfReports = Integer.parseInt(numOfReports);
         this.minutesForStudy = Integer.parseInt(minutesForStudy);
     }
-
-    // 완전한 필드 생성자
+g
     public Student(int groupNo, int memberID, String name, ArrayList<String> courseNames, int numOfReports, int minutesForStudy) {
         this.groupNo = groupNo;
         this.memberID = memberID;
