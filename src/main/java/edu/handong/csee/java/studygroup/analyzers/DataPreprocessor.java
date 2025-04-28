@@ -1,5 +1,7 @@
 package edu.handong.csee.java.studygroup.analyzers;
 
+import edu.handong.csee.java.studygroup.datamodel.Student;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -1,5 +1,7 @@
 package edu.handong.csee.java.studygroup.fileio;
 
+import edu.handong.csee.java.studygroup.datamodel.Student;
+
 import java.io.*;
 import java.util.ArrayList;
 

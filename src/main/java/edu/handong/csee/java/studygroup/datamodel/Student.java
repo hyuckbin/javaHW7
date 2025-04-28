@@ -25,7 +25,7 @@ public class Student {
         this.numOfReports = Integer.parseInt(numOfReports);
         this.minutesForStudy = Integer.parseInt(minutesForStudy);
     }
-g
+
     public Student(int groupNo, int memberID, String name, ArrayList<String> courseNames, int numOfReports, int minutesForStudy) {
         this.groupNo = groupNo;
         this.memberID = memberID;
@@ -85,15 +85,4 @@ g
         this.minutesForStudy = minutesForStudy;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "groupNo=" + groupNo +
-                ", memberID=" + memberID +
-                ", name='" + name + '\'' +
-                ", courseNames=" + courseNames +
-                ", numOfReports=" + numOfReports +
-                ", minutesForStudy=" + minutesForStudy +
-                '}';
-    }
 }

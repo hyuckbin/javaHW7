@@ -72,7 +72,11 @@ public class StudyGroup {
     }
 
     public void setStudyMinutes(int studyMinutes) {
-        this.studyMinutes = studyMinutes;
+        for (String courseName : courseNames) {
+            if (!this.courseNames.contains(courseName)) {
+                this.courseNames.add(courseName);
+            }
+        }
     }
 
     @Override
