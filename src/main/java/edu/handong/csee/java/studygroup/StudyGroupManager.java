@@ -26,7 +26,7 @@ public class StudyGroupManager {
 
         if (myOptionHandler.parseOptions(options, args)) {
 
-            // for -h option
+            // for - h option
             if (myOptionHandler.isPrintHelp()) {
                 myOptionHandler.printHelp(options);
             }

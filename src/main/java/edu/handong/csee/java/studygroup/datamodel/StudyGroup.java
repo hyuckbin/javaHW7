@@ -25,8 +25,6 @@ public class StudyGroup {
         this.studyMinutes = studyMinutes;
     }
 
-    // Getter and Setter methods
-
     public int getGroupNo() {
         return groupNo;
     }
@@ -59,6 +57,12 @@ public class StudyGroup {
         this.courseNames = courseNames;
     }
 
+    public void addCourseName(String courseName) {
+        if (!this.courseNames.contains(courseName)) {
+            this.courseNames.add(courseName);
+        }
+    }
+
     public int getNumOfReports() {
         return numOfReports;
     }
@@ -72,26 +76,6 @@ public class StudyGroup {
     }
 
     public void setStudyMinutes(int studyMinutes) {
-
-    }
-
-    void courseName(){
-        for (String courseName : courseNames) {
-            if (!this.courseNames.contains(courseName)) {
-                this.courseNames.add(courseName);
-            }
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "StudyGroup{" +
-                "groupNo=" + groupNo +
-                ", memberIDs=" + memberIDs +
-                ", names=" + names +
-                ", courseNames=" + courseNames +
-                ", numOfReports=" + numOfReports +
-                ", studyMinutes=" + studyMinutes +
-                '}';
+        this.studyMinutes = studyMinutes;
     }
 }

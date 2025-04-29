@@ -33,20 +33,23 @@ public class DataPreprocessor {
         return groupInfo;
     }
 
-        public static HashMap<String, ArrayList<Student>> getGroupInfoByCourseName(HashMap<Integer, ArrayList<Student>> groupInfo) {
-            HashMap<String, ArrayList<Student>> courseGroupInfo = new HashMap<>();
+    public static HashMap<String, ArrayList<StudyGroup>> getGroupInfoByCourseName(HashMap<Integer, StudyGroup> mapGroupInfo) {
+        HashMap<String, ArrayList<StudyGroup>> courseGroupInfo = new HashMap<>();
 
-            for (ArrayList<Student> students : groupInfo.values()) {
-                for (Student student : students) {
-                    for (String courseName : student.getCourseNames()) {
-                        courseGroupInfo.putIfAbsent(courseName, new ArrayList<>());
-                        courseGroupInfo.get(courseName).add(student);
-                    }
-                }
+        for (StudyGroup group : mapGroupInfo.values()) {
+            for (String courseName : group.getCourseNames()) {
+
+                // 해당 과목명이 키로 없으면 새 리스트 생성
+                courseGroupInfo.putIfAbsent(courseName, new ArrayList<>());
+
+                // 과목명에 해당 그룹 추가
+                courseGroupInfo.get(courseName).add(group);
             }
-
-            return courseGroupInfo;
         }
+
+        return courseGroupInfo;
     }
+
+}
 
 
