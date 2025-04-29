@@ -3,13 +3,20 @@ package edu.handong.csee.java.studygroup.analyzers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.handong.csee.java.studygroup.analyzers.DataPreprocessor;
+import edu.handong.csee.java.studygroup.analyzers.StatisticsManager;
 import edu.handong.csee.java.studygroup.datamodel.Student;
+import edu.handong.csee.java.studygroup.datamodel.StudyGroup;
+import edu.handong.csee.java.studygroup.exceptions.NoCourseNameFoundException;
+import edu.handong.csee.java.studygroup.fileio.FileUtils;
+import edu.handong.csee.java.studygroup.cli.OptionHandler;
+import org.apache.commons.cli.Options;
 
 public class StatisticsManager {
 
-    public static void printGroupStatistics(HashMap<Integer, ArrayList<Student>> groupInfo) {
+    public static void printGroupStatistics(HashMap<Integer, StudyGroup> groupInfo) {
         for (Integer groupNo : groupInfo.keySet()) {
-            ArrayList<Student> students = groupInfo.get(groupNo);
+            StudyGroup students = groupInfo.get(groupNo);
 
             int totalReports = 0;
             int totalStudyMinutes = 0;

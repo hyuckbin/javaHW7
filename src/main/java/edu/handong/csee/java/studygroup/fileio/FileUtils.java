@@ -1,6 +1,13 @@
 package edu.handong.csee.java.studygroup.fileio;
 
+import edu.handong.csee.java.studygroup.analyzers.DataPreprocessor;
+import edu.handong.csee.java.studygroup.analyzers.StatisticsManager;
 import edu.handong.csee.java.studygroup.datamodel.Student;
+import edu.handong.csee.java.studygroup.datamodel.StudyGroup;
+import edu.handong.csee.java.studygroup.exceptions.NoCourseNameFoundException;
+import edu.handong.csee.java.studygroup.fileio.FileUtils;
+import edu.handong.csee.java.studygroup.cli.OptionHandler;
+import org.apache.commons.cli.Options;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,7 +42,7 @@ public class FileUtils {
 
     public static void writeCSVFileByCourseName(String filename, String courseName, ArrayList<Student> students, ArrayList<StudyGroup> groups) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
-            // 파일에 헤더 먼저 작성
+
             bw.write("GroupNo,MemberID,Name,CourseName,NumOfReports,MinutesForStudy");
             bw.newLine();
 

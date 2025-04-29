@@ -3,10 +3,10 @@ package edu.handong.csee.java.studygroup.exceptions;
 public class NoCourseNameFoundException extends Exception {
 
     public NoCourseNameFoundException() {
-        super("No course name was found.");
+        super();
     }
 
-    public NoCourseNameFoundException(String message) {
-        super(message);
+    public NoCourseNameFoundException(String courseName) {
+        super("Exception-01: No course name, " + courseName + ", found!");
     }
 }
