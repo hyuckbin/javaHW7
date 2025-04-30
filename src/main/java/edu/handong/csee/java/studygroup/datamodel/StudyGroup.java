@@ -33,7 +33,7 @@ public class StudyGroup {
         this.groupNo = groupNo;
     }
 
-    public ArrayList<Integer> getMemberIDs() {
+    public ArrayList<Integer>  getMemberIDs() {
         return memberIDs;
     }
 
@@ -54,12 +54,35 @@ public class StudyGroup {
     }
 
     public void setCourseNames(ArrayList<String> courseNames) {
-        this.courseNames = courseNames;
+        this.courseNames.clear();  // 기존 목록 비우기 (기존에 설정된 과목들을 초기화)
+        for (String courseName : courseNames) {
+            addCourseName(courseName);  // addCourseName 호출로 중복 검사
+        }
     }
 
+    public void addMemberID(int id) {
+        if (!this.memberIDs.contains(id)) {
+            this.memberIDs.add(id);
+        }
+    }
+
+    public void addName(String name) {
+        if (!this.names.contains(name)) {
+            this.names.add(name);
+        }
+    }
+
+
     public void addCourseName(String courseName) {
-        if (!this.courseNames.contains(courseName)) {
-            this.courseNames.add(courseName);
+        String normalized = courseName.trim().toLowerCase();
+        for(String existing : this.courseNames) {
+            if(existing.trim().toLowerCase().equals(normalized)) return;
+        }
+        this.courseNames.add(courseName);
+    }
+    public void addCoursesFromStudent(ArrayList<String> studentCourseNames) {
+        for (String courseName : studentCourseNames) {
+            addCourseName(courseName);
         }
     }
 
@@ -77,5 +100,17 @@ public class StudyGroup {
 
     public void setStudyMinutes(int studyMinutes) {
         this.studyMinutes = studyMinutes;
+    }
+
+    @Override
+    public String toString() {
+        return "StudyGroup{" +
+                "groupNo=" + groupNo +
+                ", memberIDs=" + memberIDs +
+                ", names=" + names +
+                ", courseNames=" + courseNames +
+                ", numOfReports=" + numOfReports +
+                ", studyMinutes=" + studyMinutes +
+                '}';
     }
 }

@@ -20,8 +20,9 @@ public class Student {
         this.memberID = Integer.parseInt(memberID);
         this.name = name;
         this.courseNames = new ArrayList<>();
-        this.courseNames.add(course1);
-        this.courseNames.add(course2);
+        this.courseNames = new ArrayList<>();
+        addCourseName(course1); // 중복 방지 메서드로 추가
+        addCourseName(course2);
         this.numOfReports = Integer.parseInt(numOfReports);
         this.minutesForStudy = Integer.parseInt(minutesForStudy);
     }
@@ -68,6 +69,16 @@ public class Student {
     public void setCourseNames(ArrayList<String> courseNames) {
         this.courseNames = courseNames;
     }
+
+    public void addCourseName(String courseName) {
+        String normalized = courseName.trim().toLowerCase();
+        for (String existing : this.courseNames) {
+            if (existing.trim().toLowerCase().equals(normalized)) return;
+        }
+        this.courseNames.add(courseName);
+    }
+
+
 
     public int getNumOfReports() {
         return numOfReports;

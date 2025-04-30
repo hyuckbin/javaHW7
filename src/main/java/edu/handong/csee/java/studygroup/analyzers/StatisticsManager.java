@@ -1,41 +1,35 @@
 package edu.handong.csee.java.studygroup.analyzers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
-import edu.handong.csee.java.studygroup.analyzers.DataPreprocessor;
-import edu.handong.csee.java.studygroup.analyzers.StatisticsManager;
-import edu.handong.csee.java.studygroup.datamodel.Student;
 import edu.handong.csee.java.studygroup.datamodel.StudyGroup;
-import edu.handong.csee.java.studygroup.exceptions.NoCourseNameFoundException;
-import edu.handong.csee.java.studygroup.fileio.FileUtils;
-import edu.handong.csee.java.studygroup.cli.OptionHandler;
-import org.apache.commons.cli.Options;
 
 public class StatisticsManager {
 
     public static void printGroupStatistics(HashMap<Integer, StudyGroup> groupInfo) {
         for (Integer groupNo : groupInfo.keySet()) {
-            StudyGroup students = groupInfo.get(groupNo);
+            StudyGroup group = groupInfo.get(groupNo);
 
-            int totalReports = 0;
-            int totalStudyMinutes = 0;
+            // int totalReports = group.getNumOfReports(); // 사용되지 않음
+            // int totalStudyMinutes = group.getStudyMinutes(); // 사용되지 않음
+            int numberOfStudents = group.getMemberIDs().size(); // 학생 수는 memberIDs 리스트 길이로 추정
 
-            for (Student student : students) {
-                totalReports += student.getNumOfReports();
-                totalStudyMinutes += student.getMinutesForStudy();
+            HashSet<String> uniqueCourses = new HashSet<>();
+
+            // 각 그룹이 다루는 고유한 과목들을 trim() 및 toLowerCase() 처리하여 HashSet에 추가
+            for (String course : group.getCourseNames()) {
+                uniqueCourses.add(course.trim().toLowerCase()); // <-- 이 부분을 수정합니다.
             }
 
-            int numberOfStudents = students.size();
-            double averageReports = (numberOfStudents == 0) ? 0 : (double)totalReports / numberOfStudents;
-            double averageStudyMinutes = (numberOfStudents == 0) ? 0 : (double)totalStudyMinutes / numberOfStudents;
+            int coursesName = uniqueCourses.size();
 
-            System.out.println("Group No: " + groupNo);
-            System.out.println("- Number of Students: " + numberOfStudents);
-            System.out.println("- Average Reports: " + String.format("%.2f", averageReports));
-            System.out.println("- Average Study Minutes: " + String.format("%.2f", averageStudyMinutes));
+
+            System.out.printf("Group %d, # of  students: %d, # of courses for study : %d", groupNo, numberOfStudents, coursesName);
+
             System.out.println();
         }
+
     }
 }
 

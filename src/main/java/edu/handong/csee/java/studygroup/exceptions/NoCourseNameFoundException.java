@@ -7,6 +7,6 @@ public class NoCourseNameFoundException extends Exception {
     }
 
     public NoCourseNameFoundException(String courseName) {
-        super("Exception-01: No course name, " + courseName + ", found!");
+        super("Exception-01: No course name, " +"("+ courseName +")"+ ", found!");
     }
 }
