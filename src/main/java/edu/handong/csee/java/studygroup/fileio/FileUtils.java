@@ -8,13 +8,25 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors; // Collectors 임포트
+import java.util.stream.Collectors; // Collectors import
 
+/**
+ * Utility class for handling CSV file input and output operations.
+ * Provides methods to read data from a CSV file and write data to a new CSV file.
+ */
 public class FileUtils {
 
-    // CSV 파일을 읽고 데이터를 반환하는 메서드 (수정 없음)
+    /**
+     * Reads the CSV file from the given path and returns its data as a list of records.
+     *
+     * @param path   the path to the CSV file
+     * @param header an array of strings that will store the CSV file's header names
+     * @return a list of records where each record is an array of strings representing a row in the CSV
+     */
     public static ArrayList<ArrayList<String>> readCSVFile(String path, String[] header) {
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
@@ -22,22 +34,22 @@ public class FileUtils {
                 Reader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         ) {
-            // CSV 헤더 저장
+            // Store the CSV header
             List<String> fileHeader = csvParser.getHeaderNames();
             for (int i = 0; i < fileHeader.size(); i++) {
-                // null 체크 및 trim() 추가 (안정성 향상)
+                // Check for null and trim for safety
                 if (fileHeader.get(i) != null) {
                     header[i] = fileHeader.get(i).trim();
                 } else {
-                    header[i] = ""; // 혹은 다른 기본값
+                    header[i] = ""; // Default value if null
                 }
             }
 
-            // 레코드 읽기
+            // Read the records from the CSV file
             for (CSVRecord record : csvParser) {
                 ArrayList<String> row = new ArrayList<>();
                 for (String value : record) {
-                    // null 체크 및 trim() 추가 (안정성 향상)
+                    // Check for null and trim for safety
                     row.add(value != null ? value.trim() : "");
                 }
                 data.add(row);
@@ -45,66 +57,71 @@ public class FileUtils {
         } catch (IOException e) {
             System.err.println("Error reading CSV file: " + e.getMessage());
             e.printStackTrace();
-            // 파일을 읽지 못하면 빈 리스트 반환
+            // Return empty list in case of error
             return new ArrayList<>();
         } catch (Exception e) {
             System.err.println("An unexpected error occurred while reading CSV file: " + e.getMessage());
             e.printStackTrace();
-            // 예상치 못한 오류 발생 시 빈 리스트 반환
+            // Return empty list in case of error
             return new ArrayList<>();
         }
-
 
         return data;
     }
 
-    // 과목별로 데이터를 CSV 파일로 저장하는 메서드
+    /**
+     * Writes the data to a new CSV file filtered by the given course name.
+     * The output file will be named based on the original file name and course name.
+     *
+     * @param originalFileName the name of the original file
+     * @param courseName       the course name to filter the data by
+     * @param header           a list of column headers to write to the CSV file
+     * @param groups           a list of StudyGroup objects containing the data to write
+     */
     public static void writeCSVFileByCourseName(String originalFileName, String courseName, ArrayList<String> header, ArrayList<StudyGroup> groups) {
-        // 출력 파일 이름 생성: 원본 파일 이름에서 .csv 확장자를 제거하고 "_[과목 이름].csv" 추가
-        // 예: study-group-statistics.csv -> study-group-statistics_Computer Vision.csv
+        // Generate the output file name by removing the .csv extension and adding the course name
         String baseFileName = originalFileName;
         int extensionIndex = originalFileName.lastIndexOf('.');
         if (extensionIndex > 0) {
             baseFileName = originalFileName.substring(0, extensionIndex);
         }
-        // 출력 파일이 저장될 경로 설정 (output 폴더 생성)
+        // Set up the output directory (create if it doesn't exist)
         File outputDir = new File("output");
-        if (!outputDir.exists()){
-            outputDir.mkdirs(); // output 폴더가 없으면 생성
+        if (!outputDir.exists()) {
+            outputDir.mkdirs(); // Create output directory if it doesn't exist
         }
-        String outputFileName = outputDir.getPath() + "/" + new File(baseFileName).getName() + "_" + courseName + ".csv"; // output 폴더 안에 파일 생성
+
+        // Create the output file path
+        String outputFileName = outputDir.getPath() + "/" + new File(baseFileName).getName() + "-" + courseName + ".csv";
 
         try (
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(outputFileName), StandardCharsets.UTF_8));
-                // CSVFormat.DEFAULT는 보통 콤마가 포함된 필드를 자동으로 큰따옴표로 묶어줍니다.
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), StandardCharsets.UTF_8));
+                // CSVPrinter automatically quotes fields containing commas
                 CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(header.toArray(new String[0])))
         ) {
+            // Write the StudyGroup data into the CSV
             for (StudyGroup group : groups) {
-                // MemberIDs를 "ID1, ID2, ID3" 형식의 문자열로 만듭니다.
+                // Convert member IDs to a comma-separated string
                 String memberIDsStr = group.getMemberIDs().stream()
                         .map(String::valueOf)
-                        .collect(Collectors.joining(", ")); // ✅ 콤마와 공백으로 구분
+                        .collect(Collectors.joining(", "));
 
-                // MemberNames를 "Name1, Name2, Name3" 형식의 문자열로 만듭니다.
+                // Convert member names to a comma-separated string
                 String memberNamesStr = group.getNames().stream()
-                        .collect(Collectors.joining(", ")); // ✅ 콤마와 공백으로 구분
+                        .collect(Collectors.joining(", "));
 
-
-                // CSV 레코드를 출력합니다. 헤더와 일치하도록 5개 필드만 씁니다.
+                // Print each record to the CSV
                 csvPrinter.printRecord(
-                        group.getGroupNo(), // Group
-                        memberIDsStr, // MemberIDs
-                        memberNamesStr, // MemberNames
-                        group.getNumOfReports(), // Reports
-                        group.getStudyMinutes() // Times
-                        // ❌ 여기에 'courseName' 필드는 추가하지 않습니다. (헤더와 불일치)
+                        group.getGroupNo(), // Group number
+                        memberIDsStr, // Member IDs
+                        memberNamesStr, // Member names
+                        group.getNumOfReports(), // Number of reports
+                        group.getStudyMinutes() // Study time
                 );
             }
-            csvPrinter.flush(); // 버퍼에 남은 데이터를 파일에 씁니다.
+            csvPrinter.flush(); // Ensure all data is written to the file
 
-            // ✅ 파일 저장이 성공한 후에 메시지를 출력합니다.
-            // StudyGroupManager에서 출력하는 것처럼 "output/" 경로를 포함하여 출력합니다.
+            // Print a success message after saving the file
             System.out.println("The output file, output/" + new File(outputFileName).getName() + ", is saved!!");
 
         } catch (IOException e) {
